@@ -8,21 +8,18 @@ let body = '';
 
 function response(contentType, contentLength, body, theDate) {
   return `HTTP/1.1 200 OK
-      Server: jatinku/1.0.0 
-      Date: ${theDate}
-      Content-Type: ${contentType}
-      Content-Length: ${contentLength}
+          Server: jatinku/1.0.0 
+          Date: ${theDate}
+          Content-Type: ${contentType}
+          Content-Length: ${contentLength}
 
-      ${body}
-      `;
+          ${body}
+          `;
 }
 
-// this creates a server
-const server = net
-  .createServer(socket => {
+const server = net.createServer(socket => {
     socket.setEncoding('utf8');
     socket.on('data', data => {
-      // this is the request
 
       let dataIndex = data.slice(0, data.indexOf('H') - 1);
 
@@ -40,7 +37,6 @@ const server = net
 
       if (dataIndex === 'GET /hydrogen.html') {
         contentType = 'text/html; charset=8';
-
         fs.readFile('./hydrogen.html', function read(err, data) {
           if (err) {
             throw err;
@@ -57,12 +53,12 @@ const server = net
           if (err) {
             throw err;
           }
-
           contentLength = data.length
           socket.write(response(contentType, contentLength, data, theDate));
           socket.end();
         });
       }
+
       if (dataIndex === 'GET /error.html') {
         contentType = 'text/html; charset=8';
         fs.readFile('./error.html', function read(err, data){
@@ -74,6 +70,7 @@ const server = net
           socket.end();
         })
       }
+
       if (dataIndex === 'GET /styles.css') {
         contentType = 'text/css; charset=utf-8';
         fs.readFile('./styles.css', function read(err, data){
@@ -86,16 +83,14 @@ const server = net
         })
       }
 
-      // send response back here
     });
   })
 
-  // handle errors on the server
   .on('error', err => {
     console.log(err);
   });
 
-// this starts the server
+
 server.listen(8080, () => {
   console.log('Sesrver is UP');
 });
